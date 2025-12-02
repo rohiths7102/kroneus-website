@@ -1,0 +1,258 @@
+'use client'
+
+import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
+
+const securityLayers = [
+    { name: 'Input Validation', color: '#00bcd4', icon: '🔍', desc: 'Validates all incoming requests and filters malicious inputs' },
+    { name: 'Behavioral Analysis', color: '#10b981', icon: '🧠', desc: 'ML-powered analysis of agent behavior patterns in real-time' },
+    { name: 'Policy Enforcement', color: '#f59e0b', icon: '📋', desc: 'Enforces strict business logic and compliance rules' },
+    { name: 'Threat Detection', color: '#ef4444', icon: '⚠️', desc: 'Identifies known attack patterns and anomalies' },
+    { name: 'Action Filtering', color: '#ec4899', icon: '🛡️', desc: 'Blocks unauthorized actions before execution' },
+    { name: 'Audit Logging', color: '#8b5cf6', icon: '📝', desc: 'Immutable blockchain-backed audit trail' },
+]
+
+const attackScenarios = [
+    {
+        name: 'Banking: Wire Transfer Fraud',
+        industry: 'Banking',
+        description: 'Agent attempts $50,000 wire transfer to suspicious offshore account',
+        color: 'from-red-500 to-orange-500',
+        icon: '🏦',
+        blockedAt: 2,
+    },
+    {
+        name: 'Banking: Account Data Extraction',
+        industry: 'Banking',
+        description: 'AI agent tries to export customer PII without authorization',
+        color: 'from-orange-500 to-yellow-500',
+        icon: '🏦',
+        blockedAt: 4,
+    },
+    {
+        name: 'Retail: Dynamic Pricing Attack',
+        industry: 'Retail',
+        description: 'Competitor bot manipulating prices to drain profit margins',
+        color: 'from-purple-500 to-pink-500',
+        icon: '🛒',
+        blockedAt: 1,
+    },
+    {
+        name: 'Retail: Inventory Manipulation',
+        industry: 'Retail',
+        description: 'Agent requests unauthorized inventory adjustment',
+        color: 'from-pink-500 to-rose-500',
+        icon: '🛒',
+        blockedAt: 2,
+    },
+    {
+        name: 'Fleet: Remote Command Injection',
+        industry: 'Autonomous Vehicles',
+        description: 'Malicious command attempting to unlock all vehicle doors remotely',
+        color: 'from-blue-500 to-cyan-500',
+        icon: '🚗',
+        blockedAt: 3,
+    },
+    {
+        name: 'Fleet: Unauthorized Firmware Update',
+        industry: 'Autonomous Vehicles',
+        description: 'Agent requests critical firmware update without proper authorization',
+        color: 'from-cyan-500 to-teal-500',
+        icon: '🚗',
+        blockedAt: 2,
+    },
+    {
+        name: 'Enterprise: Privilege Escalation',
+        industry: 'Enterprise IT',
+        description: 'Helpdesk bot attempting to grant admin access without MFA',
+        color: 'from-indigo-500 to-purple-500',
+        icon: '🏢',
+        blockedAt: 4,
+    },
+    {
+        name: 'Enterprise: Firewall Configuration Change',
+        industry: 'Enterprise IT',
+        description: 'AI suggests opening port 3389 (RDP) to public internet',
+        color: 'from-violet-500 to-purple-500',
+        icon: '🏢',
+        blockedAt: 2,
+    },
+]
+
+export default function InteractiveSecurityDemo() {
+    const [selectedAttack, setSelectedAttack] = useState(0)
+    const [isRunning, setIsRunning] = useState(false)
+    const [currentLayer, setCurrentLayer] = useState(0)
+    const [isBlocked, setIsBlocked] = useState(false)
+
+    // Ref for auto-scroll target
+    const simulationButtonRef = useRef<HTMLDivElement>(null)
+
+    // AUTO-SCROLL when scenario is selected
+    const handleScenarioSelect = (index: number) => {
+        setSelectedAttack(index)
+        resetDemo()
+
+        // Auto-scroll to simulation button after short delay
+        setTimeout(() => {
+            simulationButtonRef.current?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            })
+        }, 300)
+    }
+
+    useEffect(() => {
+        const currentScenario = attackScenarios[selectedAttack]
+
+        if (isRunning && !isBlocked) {
+            const timer = setTimeout(() => {
+                if (currentLayer < securityLayers.length - 1) {
+                    setCurrentLayer(currentLayer + 1)
+
+                    if (currentLayer + 1 === currentScenario.blockedAt) {
+                        setIsBlocked(true)
+                    }
+                } else {
+                    setIsRunning(false)
+                }
+            }, 1000)
+
+            return () => clearTimeout(timer)
+        }
+    }, [isRunning, currentLayer, isBlocked, selectedAttack])
+
+    const startDemo = () => {
+        setIsRunning(true)
+        setCurrentLayer(0)
+        setIsBlocked(false)
+    }
+
+    const resetDemo = () => {
+        setIsRunning(false)
+        setCurrentLayer(0)
+        setIsBlocked(false)
+    }
+
+    return (
+        <section id="demo" className="relative py-32 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70" />
+
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* Section Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-center mb-16"
+                >
+                    <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
+                        See SELA in <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">Action</span>
+                    </h2>
+                    <p className="text-xl text-slate-300 max-w-3xl mx-auto">
+                        Interactive Security Demo
+                    </p>
+                    <p className="text-lg text-slate-400 max-w-3xl mx-auto mt-2">
+                        Watch SELA's 6-layer security model block attacks across 4 industries in real-time
+                    </p>
+                </motion.div>
+
+                {/* Attack Selector Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+                    {attackScenarios.map((scenario, index) => (
+                        <motion.button
+                            key={index}
+                            onClick={() => handleScenarioSelect(index)}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.05 }}
+                            className={`p-6 rounded-2xl border-2 transition-all hover:scale-105 text-left ${selectedAttack === index
+                                    ? 'border-cyan-400 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 shadow-2xl'
+                                    : 'border-slate-700 bg-slate-900/50 hover:border-slate-600'
+                                }`}
+                        >
+                            <div className="flex items-center gap-3 mb-3">
+                                <span className="text-3xl">{scenario.icon}</span>
+                            </div>
+                            <h4 className="text-lg font-bold text-white mb-2">{scenario.industry}</h4>
+                            <p className="text-sm text-slate-300">{scenario.description}</p>
+                        </motion.button>
+                    ))}
+                </div>
+
+                {/* Security Layers Display */}
+                <div className="mb-12 p-8 bg-slate-900/70 backdrop-blur-xl rounded-3xl border border-cyan-500/30">
+                    <h3 className="text-3xl font-bold text-white mb-8 text-center">SELA's 6-Layer Security Architecture</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {securityLayers.map((layer, index) => {
+                            const isActive = isRunning && currentLayer >= index
+                            const isCurrentLayer = isRunning && currentLayer === index
+                            const isBlockedHere = isBlocked && currentLayer === index
+
+                            return (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0.5, scale: 0.95 }}
+                                    animate={{
+                                        opacity: isActive ? 1 : 0.5,
+                                        scale: isCurrentLayer ? 1.05 : 1,
+                                    }}
+                                    className={`p-6 rounded-2xl border-2 transition-all ${isBlockedHere
+                                            ? 'border-red-500 bg-red-500/20 shadow-2xl'
+                                            : isCurrentLayer
+                                                ? 'border-cyan-400 bg-cyan-500/20 shadow-2xl'
+                                                : isActive
+                                                    ? 'border-emerald-500 bg-emerald-500/10'
+                                                    : 'border-slate-700 bg-slate-900/50'
+                                        }`}
+                                >
+                                    <div className="flex items-center gap-3 mb-3">
+                                        <span className="text-3xl">{layer.icon}</span>
+                                        <h4 className="text-lg font-bold text-white">
+                                            Layer {index + 1}: {layer.name}
+                                        </h4>
+                                    </div>
+                                    <p className="text-sm text-slate-300">{layer.desc}</p>
+                                </motion.div>
+                            )
+                        })}
+                    </div>
+                </div>
+
+                {/* Status Display */}
+                {isBlocked && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-12 p-10 bg-gradient-to-br from-red-900/40 to-orange-900/40 rounded-3xl border-2 border-red-500 text-center"
+                    >
+                        <h3 className="text-4xl font-bold text-red-300 mb-4">
+                            🛡️ Threat Blocked!
+                        </h3>
+                        <p className="text-xl text-slate-200">
+                            SELA successfully prevented this attack at Layer {currentLayer + 1}: {securityLayers[currentLayer].name}
+                        </p>
+                    </motion.div>
+                )}
+
+                {/* Control Buttons - AUTO-SCROLL TARGET */}
+                <div ref={simulationButtonRef} className="flex flex-col sm:flex-row gap-6 justify-center">
+                    <button
+                        onClick={startDemo}
+                        disabled={isRunning}
+                        className="px-10 py-5 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 disabled:from-slate-600 disabled:to-slate-700 text-white font-bold text-xl rounded-2xl transition-all hover:scale-105 disabled:cursor-not-allowed disabled:scale-100"
+                    >
+                        {isRunning ? 'Running Simulation...' : 'Start Security Simulation'}
+                    </button>
+                    <button
+                        onClick={resetDemo}
+                        className="px-10 py-5 bg-slate-700 hover:bg-slate-600 text-white font-bold text-xl rounded-2xl transition-all hover:scale-105"
+                    >
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </section>
+    )
+}

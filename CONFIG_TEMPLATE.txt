@@ -1,0 +1,37 @@
+# CONFIGURATION TEMPLATE
+
+## Required Information:
+
+### 1. EMAIL (Choose One):
+EMAIL_ADDRESS="rohithkroneus@gmail.com"
+# OR keep: Rohithshasa@kroneuszt.onmicrosoft.com (needs MS365 config)
+
+### 2. CALENDLY/CAL.COM LINK:
+CALENDLY_LINK="https://calendly.com/YOUR-LINK-HERE"
+# Example: https://calendly.com/rohith-kroneus
+# Example: https://cal.com/kroneus-team
+
+### 3. LINKEDIN COMPANY PAGE:
+LINKEDIN_URL="https://www.linkedin.com/company/YOUR-COMPANY-HERE"
+# Example: https://www.linkedin.com/company/kroneus
+# OR personal: https://www.linkedin.com/in/rohith-shankar-123
+
+### 4. ALTERNATIVE CONTACT (Optional):
+ALT_EMAIL="contact@kroneus.com"
+PHONE="+44-XXX-XXX-XXXX"
+
+---
+
+## Quick Answers Needed:
+
+1. What email should receive forms? _______________
+2. What's your Calendly link? _______________
+3. What's your LinkedIn URL? _______________
+
+---
+
+Once you provide these, I'll update:
+- components/home/TwoStepContactForm.tsx (email + calendly)
+- components/home/ContactSection.tsx (email)
+- components/home/LinkedInSection.tsx (LinkedIn)
+- .env.local (if needed)

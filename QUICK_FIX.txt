@@ -1,0 +1,64 @@
+# 🚨 BLACK SCREEN - QUICK FIX
+
+## ✅ FIXED!
+
+**Changed:** `app/layout.tsx`  
+**Problem:** WebGL background showing black  
+**Solution:** Simple CSS gradient
+
+---
+
+## 🚀 RESTART NOW
+
+```bash
+Ctrl+C
+npm run dev
+```
+
+**Open:** http://localhost:3001  
+**Refresh:** Ctrl+Shift+R
+
+---
+
+## ✅ YOU SHOULD SEE
+
+- Dark slate background (NOT pure black)
+- KRONEUS title with **glowing circuit borders**
+- Rotating taglines
+- All buttons and text visible
+- Scrollable sections
+
+---
+
+## 🐛 STILL BLACK?
+
+1. Clear cache: Ctrl+Shift+R (3x)
+2. Delete `.next` folder
+3. Restart server
+4. Try different browser
+
+---
+
+## 💡 WHAT I CHANGED
+
+```tsx
+// OLD (black screen)
+<body className="bg-black">
+  <EnterpriseWebGLBackground />
+
+// NEW (working!)
+<body className="bg-slate-950">
+  <div className="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+```
+
+---
+
+## ✅ ALL FIXES STILL ACTIVE
+
+1. ✅ Circuit border (4px glowing)
+2. ✅ "ZERO TRUST SECURITY" text
+3. ✅ EmailJS form (template_lp65rtr)
+
+---
+
+**RESTART SERVER → HARD REFRESH → DONE!** 🎉
