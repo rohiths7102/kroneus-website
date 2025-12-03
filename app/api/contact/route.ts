@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
@@ -14,6 +12,8 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    const resend = new Resend(process.env.RESEND_API_KEY || 're_PXEXbLqR_BNuPPjSpLWNgr6HJJQpcScLt')
 
     const { data, error } = await resend.emails.send({
       from: 'KRONEUS Contact Form <onboarding@resend.dev>',
@@ -93,3 +93,6 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
