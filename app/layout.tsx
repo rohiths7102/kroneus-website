@@ -8,7 +8,7 @@ import Chatbot from '@/components/premium/Chatbot'
 import ScrollProgress from '@/components/premium/ScrollProgress'
 import SmoothScroll from '@/components/premium/SmoothScroll'
 import EnterpriseScrollTransitions from '@/components/premium/EnterpriseScrollTransitions'
-import EnterpriseWebGLBackground from '@/components/premium/EnterpriseWebGLBackground'
+import Script from 'next/script'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -62,39 +62,34 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Preload critical assets */}
         <link rel="preload" href="/kroneus-logo.png" as="image" />
+        <Script id="scroll-restoration" strategy="beforeInteractive">
+          {`
+            if ('scrollRestoration' in history) {
+              history.scrollRestoration = 'manual';
+            }
+            window.addEventListener('beforeunload', function() {
+              window.scrollTo(0, 0);
+            });
+          `}
+        </Script>
       </head>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} antialiased bg-slate-950`}>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}>
         <ThemeProvider>
-          {/* FIXED: Replaced solid black WebGL background with subtle gradient */}
-          <div className="fixed inset-0 z-[-1] bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
-            {/* Optional: Add subtle animation back later */}
-          </div>
-          
-          {/* Smooth scroll implementation */}
           <SmoothScroll />
-          
-          {/* Enterprise scroll transitions */}
           <EnterpriseScrollTransitions />
-          
-          {/* Scroll progress bar */}
           <ScrollProgress />
           
           <div className="min-h-screen flex flex-col">
-            {/* Navigation */}
             <EnterpriseNavigation />
             
-            {/* Main content */}
             <main className="flex-grow">
               {children}
             </main>
             
-            {/* Footer */}
             <Footer />
           </div>
           
-          {/* AI Chatbot */}
           <Chatbot />
         </ThemeProvider>
       </body>

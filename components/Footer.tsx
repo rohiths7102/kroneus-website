@@ -39,9 +39,9 @@ export default function Footer() {
   return (
     <footer className="bg-slate-900 dark:bg-slate-950 text-slate-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Brand Section */}
-          <div className="lg:col-span-2">
+          <div>
             <Link href="/" className="flex items-center space-x-2 mb-4">
               <ShieldCheckIcon className="h-8 w-8 text-primary-500" />
               <span className="text-2xl font-bold text-white">KRONEUS</span>
@@ -51,66 +51,50 @@ export default function Footer() {
             </p>
             <div className="space-y-2">
               <div className="flex items-center space-x-2 text-sm">
-                <EnvelopeIcon className="h-5 w-5 text-primary-500" />
-                <a href="mailto:Rohithshasa@kroneuszt.onmicrosoft.com" className="hover:text-primary-500 transition-colors">
-                  Rohithshasa@kroneuszt.onmicrosoft.com
-                </a>
-              </div>
-              <div className="flex items-center space-x-2 text-sm">
                 <MapPinIcon className="h-5 w-5 text-primary-500" />
                 <span>London, BRENT, UK</span>
               </div>
             </div>
           </div>
 
-          {/* Products */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Products</h3>
-            <ul className="space-y-2">
-              {footerLinks.product.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-sm hover:text-primary-500 transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Resources */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Resources</h3>
-            <ul className="space-y-2">
-              {footerLinks.resources.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-sm hover:text-primary-500 transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           {/* Company */}
           <div>
             <h3 className="text-white font-semibold mb-4">Company</h3>
             <ul className="space-y-2">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-sm hover:text-primary-500 transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <a
+                  href="#meet-sela"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    const element = document.querySelector('#meet-sela')
+                    if (element) {
+                      const elementPosition = element.getBoundingClientRect().top
+                      const offsetPosition = elementPosition + window.pageYOffset - 100
+                      window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
+                    }
+                  }}
+                  className="text-sm hover:text-primary-500 transition-colors cursor-pointer"
+                >
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#contact-form"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    const element = document.querySelector('#contact-form')
+                    if (element) {
+                      const elementPosition = element.getBoundingClientRect().top
+                      const offsetPosition = elementPosition + window.pageYOffset - 100
+                      window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
+                    }
+                  }}
+                  className="text-sm hover:text-primary-500 transition-colors cursor-pointer"
+                >
+                  Contact
+                </a>
+              </li>
             </ul>
           </div>
         </div>

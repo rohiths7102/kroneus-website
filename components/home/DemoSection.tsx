@@ -85,8 +85,9 @@ export default function InteractiveSecurityDemo() {
     const [currentLayer, setCurrentLayer] = useState(0)
     const [isBlocked, setIsBlocked] = useState(false)
 
-    // Ref for auto-scroll target
+    // Ref for auto-scroll targets
     const simulationButtonRef = useRef<HTMLDivElement>(null)
+    const attackVisualizationRef = useRef<HTMLDivElement>(null)
 
     // AUTO-SCROLL when scenario is selected
     const handleScenarioSelect = (index: number) => {
@@ -95,10 +96,14 @@ export default function InteractiveSecurityDemo() {
 
         // Auto-scroll to simulation button after short delay
         setTimeout(() => {
-            simulationButtonRef.current?.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            })
+            if (simulationButtonRef.current) {
+                const elementPosition = simulationButtonRef.current.getBoundingClientRect().top
+                const offsetPosition = elementPosition + window.pageYOffset - 100
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                })
+            }
         }, 300)
     }
 
@@ -126,6 +131,18 @@ export default function InteractiveSecurityDemo() {
         setIsRunning(true)
         setCurrentLayer(0)
         setIsBlocked(false)
+
+        // Auto-scroll to attack visualization after clicking Start
+        setTimeout(() => {
+            if (attackVisualizationRef.current) {
+                const elementPosition = attackVisualizationRef.current.getBoundingClientRect().top
+                const offsetPosition = elementPosition + window.pageYOffset - 100
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                })
+            }
+        }, 500)
     }
 
     const resetDemo = () => {
@@ -168,8 +185,8 @@ export default function InteractiveSecurityDemo() {
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.05 }}
                             className={`p-6 rounded-2xl border-2 transition-all hover:scale-105 text-left ${selectedAttack === index
-                                    ? 'border-cyan-400 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 shadow-2xl'
-                                    : 'border-slate-700 bg-slate-900/50 hover:border-slate-600'
+                                ? 'border-cyan-400 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 shadow-2xl'
+                                : 'border-slate-700 bg-slate-900/50 hover:border-slate-600'
                                 }`}
                         >
                             <div className="flex items-center gap-3 mb-3">
@@ -181,8 +198,8 @@ export default function InteractiveSecurityDemo() {
                     ))}
                 </div>
 
-                {/* Security Layers Display */}
-                <div className="mb-12 p-8 bg-slate-900/70 backdrop-blur-xl rounded-3xl border border-cyan-500/30">
+                {/* Security Layers Display - ATTACK VISUALIZATION */}
+                <div ref={attackVisualizationRef} className="mb-12 p-8 bg-slate-900/70 backdrop-blur-xl rounded-3xl border border-cyan-500/30">
                     <h3 className="text-3xl font-bold text-white mb-8 text-center">SELA's 6-Layer Security Architecture</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {securityLayers.map((layer, index) => {
@@ -199,12 +216,12 @@ export default function InteractiveSecurityDemo() {
                                         scale: isCurrentLayer ? 1.05 : 1,
                                     }}
                                     className={`p-6 rounded-2xl border-2 transition-all ${isBlockedHere
-                                            ? 'border-red-500 bg-red-500/20 shadow-2xl'
-                                            : isCurrentLayer
-                                                ? 'border-cyan-400 bg-cyan-500/20 shadow-2xl'
-                                                : isActive
-                                                    ? 'border-emerald-500 bg-emerald-500/10'
-                                                    : 'border-slate-700 bg-slate-900/50'
+                                        ? 'border-red-500 bg-red-500/20 shadow-2xl'
+                                        : isCurrentLayer
+                                            ? 'border-cyan-400 bg-cyan-500/20 shadow-2xl'
+                                            : isActive
+                                                ? 'border-emerald-500 bg-emerald-500/10'
+                                                : 'border-slate-700 bg-slate-900/50'
                                         }`}
                                 >
                                     <div className="flex items-center gap-3 mb-3">

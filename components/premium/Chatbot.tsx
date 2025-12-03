@@ -72,11 +72,7 @@ export default function Chatbot() {
 
         // Demo request
         if (lowerMessage.includes('demo') || lowerMessage.includes('contact') || lowerMessage.includes('interested') || lowerMessage.includes('yes')) {
-            setTimeout(() => {
-                const contactSection = document.querySelector('#contact')
-                contactSection?.scrollIntoView({ behavior: 'smooth' })
-            }, 2000)
-            return "Great! I'll take you to our contact section where you can schedule a demo with our team. One moment..."
+            return "NAVIGATE_TO_CONTACT_FORM" // Special flag to trigger navigation
         }
 
         // Pricing
@@ -108,14 +104,41 @@ export default function Chatbot() {
         // Simulate bot typing
         setIsTyping(true)
         setTimeout(() => {
-            const botResponse: Message = {
-                id: (Date.now() + 1).toString(),
-                text: getAutoResponse(text),
-                sender: 'bot',
-                timestamp: new Date(),
+            const responseText = getAutoResponse(text)
+
+            // Check if this is a navigation request
+            if (responseText === "NAVIGATE_TO_CONTACT_FORM") {
+                const botResponse: Message = {
+                    id: (Date.now() + 1).toString(),
+                    text: "Great! I'll take you to our contact form where you can schedule a demo. One moment...",
+                    sender: 'bot',
+                    timestamp: new Date(),
+                }
+                setMessages(prev => [...prev, botResponse])
+                setIsTyping(false)
+
+                // Navigate to contact form with offset and close chatbot
+                setTimeout(() => {
+                    const contactSection = document.querySelector('#contact-form')
+                    if (contactSection) {
+                        const elementPosition = contactSection.getBoundingClientRect().top
+                        const offsetPosition = elementPosition + window.pageYOffset - 100
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
+                    }
+                    // Close chatbot after navigation
+                    setTimeout(() => setIsOpen(false), 1500)
+                }, 1000)
+            } else {
+                // Normal response
+                const botResponse: Message = {
+                    id: (Date.now() + 1).toString(),
+                    text: responseText,
+                    sender: 'bot',
+                    timestamp: new Date(),
+                }
+                setMessages(prev => [...prev, botResponse])
+                setIsTyping(false)
             }
-            setMessages(prev => [...prev, botResponse])
-            setIsTyping(false)
         }, 1000 + Math.random() * 1000) // Random delay 1-2s
     }
 

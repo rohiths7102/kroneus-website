@@ -6,11 +6,9 @@ import { ShieldCheckIcon, LockClosedIcon, BeakerIcon } from '@heroicons/react/24
 export default function WhatWeBuildSection() {
     return (
         <section id="what-we-build" className="relative py-32 overflow-hidden">
-            {/* Dark overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/80" />
 
             <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Section Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -23,9 +21,15 @@ export default function WhatWeBuildSection() {
                     <p className="text-2xl text-slate-300 max-w-4xl mx-auto font-light leading-relaxed">
                         Governance and defense for autonomous intelligence
                     </p>
+                    <div className="mt-8 inline-block">
+                        <div className="px-8 py-4 bg-gradient-to-r from-cyan-500/20 to-emerald-500/20 rounded-2xl border-2 border-cyan-400/50 backdrop-blur-sm">
+                            <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-emerald-300">
+                                Built for Agentic AI Security
+                            </p>
+                        </div>
+                    </div>
                 </motion.div>
 
-                {/* Main Description */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -40,7 +44,6 @@ export default function WhatWeBuildSection() {
                     </p>
                 </motion.div>
 
-                {/* Pilot Program Section */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -53,7 +56,6 @@ export default function WhatWeBuildSection() {
                     </h3>
                 </motion.div>
 
-                {/* Four Sectors Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
                     {[
                         { name: 'Banking & Finance', icon: '🏦', color: 'from-blue-500 to-cyan-500' },
@@ -77,7 +79,6 @@ export default function WhatWeBuildSection() {
                     ))}
                 </div>
 
-                {/* Discount Note */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}

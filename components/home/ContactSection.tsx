@@ -196,7 +196,7 @@ export default function ContactSection() {
                     </div>
                 </motion.div>
 
-                {/* Operations Section - REPLACES Follower/Employee counts */}
+                {/* Operations Section */}
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -216,11 +216,11 @@ export default function ContactSection() {
 
                     <div className="p-8 bg-gradient-to-br from-emerald-900/30 to-emerald-900/10 backdrop-blur-xl rounded-2xl border border-emerald-500/40">
                         <div className="flex items-center gap-4 mb-4">
-                            <div className="text-4xl">💼</div>
-                            <h4 className="text-2xl font-bold text-white">Remote-First</h4>
+                            <div className="text-4xl">🔬</div>
+                            <h4 className="text-2xl font-bold text-white">Research-Driven</h4>
                         </div>
                         <p className="text-lg text-slate-200 leading-relaxed">
-                            Remote-first security organization serving both regions.
+                            Rapid prototyping and advanced threat analysis for agentic AI security.
                         </p>
                     </div>
                 </motion.div>

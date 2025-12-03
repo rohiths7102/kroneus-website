@@ -23,11 +23,29 @@ export default function EnterpriseNavigation() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setMobileMenuOpen(false)
+  }
+
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault()
+    
+    if (id === '#hero') {
+      scrollToTop()
+      return
+    }
+
     const element = document.querySelector(id)
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - 120
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
+
       setMobileMenuOpen(false)
     }
   }
@@ -38,8 +56,8 @@ export default function EnterpriseNavigation() {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-          ? 'bg-slate-900/70 backdrop-blur-2xl shadow-2xl border-b border-cyan-500/20'
-          : 'bg-transparent'
+        ? 'bg-slate-900/70 backdrop-blur-2xl shadow-2xl border-b border-cyan-500/20'
+        : 'bg-transparent'
         }`}
       style={{
         boxShadow: scrolled
@@ -49,13 +67,11 @@ export default function EnterpriseNavigation() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-28">
-          {/* PREMIUM LOGO */}
-          <Link href="/" className="flex items-center space-x-4 group relative z-50">
+          <button onClick={scrollToTop} className="flex items-center space-x-4 group relative z-50">
             <motion.div
               style={{ scale: logoScale }}
               className="relative"
             >
-              {/* Logo glow effect */}
               <motion.div
                 style={{ opacity: logoGlow }}
                 className="absolute inset-0 rounded-2xl blur-xl"
@@ -73,7 +89,6 @@ export default function EnterpriseNavigation() {
                 }}
               />
 
-              {/* High-resolution logo */}
               <div className="relative">
                 <Image
                   src="/kroneus-logo.png"
@@ -89,7 +104,6 @@ export default function EnterpriseNavigation() {
                   }}
                 />
 
-                {/* Animated border */}
                 <div
                   className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   style={{
@@ -100,7 +114,6 @@ export default function EnterpriseNavigation() {
               </div>
             </motion.div>
 
-            {/* Company name with gradient - UPDATED TO ZERO TRUST SECURITY */}
             <motion.div className="flex flex-col">
               <span
                 className="text-3xl font-black tracking-tight leading-none"
@@ -119,15 +132,15 @@ export default function EnterpriseNavigation() {
                 ZERO TRUST SECURITY
               </span>
             </motion.div>
-          </Link>
+          </button>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-2">
             {[
               { name: 'Home', href: '#hero' },
               { name: 'Products', href: '#products' },
               { name: 'Demo', href: '#demo' },
-              { name: 'Contact', href: '#contact' },
+              { name: 'Team', href: '#team' },
+              { name: 'Contact', href: '#contact-form' },
             ].map((item) => (
               <motion.a
                 key={item.name}
@@ -137,26 +150,22 @@ export default function EnterpriseNavigation() {
                 whileTap={{ scale: 0.95 }}
                 className="relative px-5 py-3 text-base font-semibold text-slate-200 rounded-lg overflow-hidden group"
               >
-                {/* Hover background */}
                 <span className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                {/* Text */}
                 <span className="relative z-10 group-hover:text-cyan-300 transition-colors duration-300">
                   {item.name}
                 </span>
 
-                {/* Bottom border on hover */}
                 <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-cyan-400 to-emerald-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
               </motion.a>
             ))}
           </nav>
 
-          {/* CTA + Theme Toggle */}
           <div className="hidden md:flex items-center space-x-4">
             <ThemeToggle />
             <motion.a
-              href="#contact"
-              onClick={(e) => scrollToSection(e, '#contact')}
+              href="#contact-form"
+              onClick={(e) => scrollToSection(e, '#contact-form')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="relative px-8 py-3 bg-gradient-to-r from-cyan-500 via-emerald-500 to-teal-500 text-white font-bold rounded-xl overflow-hidden group"
@@ -164,7 +173,6 @@ export default function EnterpriseNavigation() {
                 boxShadow: '0 0 30px rgba(6,182,212,0.5), 0 0 50px rgba(16,185,129,0.3)',
               }}
             >
-              {/* Animated shine effect */}
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
 
               <span className="relative z-10 flex items-center gap-2">
@@ -176,7 +184,6 @@ export default function EnterpriseNavigation() {
             </motion.a>
           </div>
 
-          {/* Mobile menu button */}
           <div className="flex md:hidden items-center space-x-3">
             <ThemeToggle />
             <motion.button
@@ -196,7 +203,6 @@ export default function EnterpriseNavigation() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       <motion.div
         initial={false}
         animate={mobileMenuOpen ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
@@ -208,7 +214,8 @@ export default function EnterpriseNavigation() {
             { name: 'Home', href: '#hero' },
             { name: 'Products', href: '#products' },
             { name: 'Demo', href: '#demo' },
-            { name: 'Contact', href: '#contact' },
+            { name: 'Team', href: '#team' },
+            { name: 'Contact', href: '#contact-form' },
           ].map((item, index) => (
             <motion.a
               key={item.name}
@@ -223,10 +230,9 @@ export default function EnterpriseNavigation() {
             </motion.a>
           ))}
 
-          {/* Mobile CTA */}
           <motion.a
-            href="#contact"
-            onClick={(e) => scrollToSection(e, '#contact')}
+            href="#contact-form"
+            onClick={(e) => scrollToSection(e, '#contact-form')}
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}

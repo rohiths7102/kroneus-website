@@ -16,7 +16,6 @@
     "export": "next build && next export"
   },
   "dependencies": {
-    "@emailjs/browser": "^4.4.1",
     "@gsap/react": "^2.1.2",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.1.1",
@@ -27,7 +26,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intersection-observer": "^10.0.0",
-    "recharts": "^2.10.3"
+    "recharts": "^2.10.3",
+    "resend": "^6.5.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",

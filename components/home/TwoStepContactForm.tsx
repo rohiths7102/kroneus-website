@@ -3,7 +3,6 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useRef } from 'react'
 import { CheckCircleIcon, CalendarIcon } from '@heroicons/react/24/outline'
-import emailjs from '@emailjs/browser'
 
 export default function TwoStepContactForm() {
     const [step, setStep] = useState(1)
@@ -24,64 +23,34 @@ export default function TwoStepContactForm() {
         setIsSubmitting(true)
 
         try {
-            await sendEmail(formData)
-            setSubmitSuccess(true)
-            setStep(2)
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
 
-            setTimeout(() => {
-                step2Ref.current?.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                })
-            }, 500)
+            const data = await response.json()
+
+            if (data.success) {
+                setSubmitSuccess(true)
+                setStep(2)
+
+                setTimeout(() => {
+                    step2Ref.current?.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    })
+                }, 500)
+            } else {
+                throw new Error(data.error || 'Failed to send')
+            }
         } catch (error) {
             console.error('Error sending email:', error)
-            alert('There was an error submitting your form. Please try again or email us directly at Rohithshasa@kroneuszt.onmicrosoft.com')
+            alert('There was an error submitting your form. Please try again or contact our support team.')
         } finally {
             setIsSubmitting(false)
-        }
-    }
-
-    const sendEmail = async (data: typeof formData) => {
-        try {
-            const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
-            const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
-            const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-
-            console.log('EmailJS Config Check:')
-            console.log('Service ID:', serviceId ? '✅ Found' : '❌ Missing')
-            console.log('Template ID:', templateId ? '✅ Found' : '❌ Missing')
-            console.log('Public Key:', publicKey ? '✅ Found' : '❌ Missing')
-
-            if (!serviceId || !templateId || !publicKey) {
-                const missing = []
-                if (!serviceId) missing.push('Service ID')
-                if (!templateId) missing.push('Template ID')
-                if (!publicKey) missing.push('Public Key')
-                throw new Error(`EmailJS credentials not configured. Missing: ${missing.join(', ')}`)
-            }
-
-            console.log('Sending email...')
-
-            const response = await emailjs.send(
-                serviceId,
-                templateId,
-                {
-                    from_name: data.fullName,
-                    from_email: data.email,
-                    phone: data.phone,
-                    service: data.service,
-                    message: data.message,
-                    to_email: 'Rohithshasa@kroneuszt.onmicrosoft.com'
-                },
-                publicKey
-            )
-
-            console.log('✅ Email sent successfully:', response)
-            return response
-        } catch (error) {
-            console.error('❌ EmailJS Error:', error)
-            throw error
         }
     }
 
@@ -93,7 +62,7 @@ export default function TwoStepContactForm() {
     }
 
     return (
-        <section className="relative py-32 overflow-hidden">
+        <section className="relative py-16 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/80" />
 
             <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -245,11 +214,8 @@ export default function TwoStepContactForm() {
                                 <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
                                     Thank You!
                                 </h2>
-                                <p className="text-2xl text-slate-300 max-w-3xl mx-auto mb-4">
+                                <p className="text-2xl text-slate-300 max-w-3xl mx-auto">
                                     We've received your contact request and will respond within 24 hours.
-                                </p>
-                                <p className="text-lg text-slate-400">
-                                    Your message has been sent to: <span className="text-cyan-400">Rohithshasa@kroneuszt.onmicrosoft.com</span>
                                 </p>
                             </motion.div>
 
