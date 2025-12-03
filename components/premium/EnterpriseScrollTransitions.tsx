@@ -20,6 +20,7 @@ if (typeof window !== 'undefined') {
  * - Zero jitter, 60 FPS performance
  * - GPU-accelerated transforms
  * - FIXED: Removed conflicting momentum scroll (Lenis handles this)
+ * - FIXED: TypeScript error with addEventListener
  */
 export default function EnterpriseScrollTransitions() {
   useEffect(() => {
@@ -196,15 +197,16 @@ export default function EnterpriseScrollTransitions() {
       },
     })
 
-    // ==================== BUTTON HOVER EFFECTS ====================
-    // Add magnetic effect to CTA buttons
+    // ==================== BUTTON HOVER EFFECTS (FIXED) ====================
+    // Add magnetic effect to CTA buttons - TYPESCRIPT ERROR FIXED
     const buttons = document.querySelectorAll('[data-magnetic]')
 
     buttons.forEach((button) => {
-      const handleMouseMove = (e: MouseEvent) => {
+      const handleMouseMove = (e: Event) => {
+        const mouseEvent = e as MouseEvent
         const rect = button.getBoundingClientRect()
-        const x = e.clientX - rect.left - rect.width / 2
-        const y = e.clientY - rect.top - rect.height / 2
+        const x = mouseEvent.clientX - rect.left - rect.width / 2
+        const y = mouseEvent.clientY - rect.top - rect.height / 2
 
         gsap.to(button, {
           x: x * 0.3,
@@ -223,8 +225,8 @@ export default function EnterpriseScrollTransitions() {
         })
       }
 
-      button.addEventListener('mousemove', handleMouseMove)
-      button.addEventListener('mouseleave', handleMouseLeave)
+      button.addEventListener('mousemove', handleMouseMove as EventListener)
+      button.addEventListener('mouseleave', handleMouseLeave as EventListener)
     })
 
     // ==================== PERFORMANCE OPTIMIZATION ====================

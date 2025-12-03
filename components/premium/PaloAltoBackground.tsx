@@ -21,7 +21,6 @@ export default function PaloAltoBackground() {
         resizeCanvas()
         window.addEventListener('resize', resizeCanvas)
 
-        // Particle system
         class Particle {
             x: number
             y: number
@@ -30,15 +29,16 @@ export default function PaloAltoBackground() {
             speedY: number
             color: string
             opacity: number
+            canvas: HTMLCanvasElement
 
-            constructor() {
+            constructor(canvas: HTMLCanvasElement) {
+                this.canvas = canvas
                 this.x = Math.random() * canvas.width
                 this.y = Math.random() * canvas.height
                 this.size = Math.random() * 3 + 1
                 this.speedX = (Math.random() - 0.5) * 0.5
                 this.speedY = (Math.random() - 0.5) * 0.5
 
-                // Random neon colors
                 const colors = ['#00bcd4', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4']
                 this.color = colors[Math.floor(Math.random() * colors.length)]
                 this.opacity = Math.random() * 0.5 + 0.3
@@ -48,17 +48,15 @@ export default function PaloAltoBackground() {
                 this.x += this.speedX
                 this.y += this.speedY
 
-                // Wrap around edges
-                if (this.x > canvas.width) this.x = 0
-                if (this.x < 0) this.x = canvas.width
-                if (this.y > canvas.height) this.y = 0
-                if (this.y < 0) this.y = canvas.height
+                if (this.x > this.canvas.width) this.x = 0
+                if (this.x < 0) this.x = this.canvas.width
+                if (this.y > this.canvas.height) this.y = 0
+                if (this.y < 0) this.y = this.canvas.height
             }
 
             draw() {
                 if (!ctx) return
 
-                // Glow effect
                 const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 3)
                 gradient.addColorStop(0, this.color + Math.floor(this.opacity * 255).toString(16).padStart(2, '0'))
                 gradient.addColorStop(1, this.color + '00')
@@ -68,7 +66,6 @@ export default function PaloAltoBackground() {
                 ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2)
                 ctx.fill()
 
-                // Core
                 ctx.fillStyle = this.color
                 ctx.beginPath()
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
@@ -76,15 +73,13 @@ export default function PaloAltoBackground() {
             }
         }
 
-        // Create particles
         const particles: Particle[] = []
         const particleCount = 100
 
         for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle())
+            particles.push(new Particle(canvas))
         }
 
-        // Connection lines
         const drawConnections = () => {
             if (!ctx) return
 
@@ -106,7 +101,6 @@ export default function PaloAltoBackground() {
             })
         }
 
-        // Flowing waves
         let waveOffset = 0
 
         const drawWaves = () => {
@@ -131,16 +125,13 @@ export default function PaloAltoBackground() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'
             ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-            // Draw waves
             drawWaves()
 
-            // Update and draw particles
             particles.forEach(particle => {
                 particle.update()
                 particle.draw()
             })
 
-            // Draw connections
             drawConnections()
 
             animationId = requestAnimationFrame(animate)
