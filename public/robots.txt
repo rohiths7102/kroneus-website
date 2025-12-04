@@ -1,9 +1,4 @@
-# Allow all crawlers
 User-agent: *
 Allow: /
 
-# Disallow admin or sensitive paths (none currently)
-# Disallow: /admin
-
-# Sitemap location
-Sitemap: https://sela.ai/sitemap.xml
+Sitemap: https://www.kroneuszerotrust.com/sitemap.xml

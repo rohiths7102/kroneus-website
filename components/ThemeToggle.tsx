@@ -10,15 +10,15 @@ export default function ThemeToggle() {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-
-    const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light')
+    const initialTheme = savedTheme || 'dark'
     setTheme(initialTheme)
 
-    if (initialTheme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
+    if (initialTheme === 'light') {
+      document.documentElement.classList.add('light')
       document.documentElement.classList.remove('dark')
+    } else {
+      document.documentElement.classList.add('dark')
+      document.documentElement.classList.remove('light')
     }
   }, [])
 
@@ -31,10 +31,12 @@ export default function ThemeToggle() {
       setTheme(newTheme)
       localStorage.setItem('theme', newTheme)
 
-      if (newTheme === 'dark') {
-        document.documentElement.classList.add('dark')
-      } else {
+      if (newTheme === 'light') {
+        document.documentElement.classList.add('light')
         document.documentElement.classList.remove('dark')
+      } else {
+        document.documentElement.classList.add('dark')
+        document.documentElement.classList.remove('light')
       }
     }, 800)
 
@@ -68,15 +70,15 @@ export default function ThemeToggle() {
       </motion.button>
 
       <AnimatePresence>
-        {showMatrix && <MatrixEffect />}
+        {showMatrix && <FullScreenMatrixEffect />}
       </AnimatePresence>
     </>
   )
 }
 
-function MatrixEffect() {
+function FullScreenMatrixEffect() {
   useEffect(() => {
-    const canvas = document.getElementById('matrix-effect') as HTMLCanvasElement
+    const canvas = document.getElementById('fullscreen-matrix') as HTMLCanvasElement
     if (!canvas) return
 
     const ctx = canvas.getContext('2d')
@@ -131,10 +133,12 @@ function MatrixEffect() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
       className="fixed inset-0 z-[9999] pointer-events-none"
+      style={{ width: '100vw', height: '100vh', top: 0, left: 0 }}
     >
       <canvas
-        id="matrix-effect"
+        id="fullscreen-matrix"
         className="w-full h-full"
+        style={{ width: '100%', height: '100%' }}
       />
     </motion.div>
   )
