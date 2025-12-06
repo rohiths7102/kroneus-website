@@ -1,4 +1,22 @@
 User-agent: *
 Allow: /
+Disallow: /api/
 
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Sitemaps
 Sitemap: https://www.kroneuszerotrust.com/sitemap.xml
+
+# Specific bots
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+
+User-agent: Slurp
+Allow: /
+Disallow: /api/
